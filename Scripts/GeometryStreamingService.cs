@@ -45,7 +45,7 @@ namespace teleport
 		[DllImport(TeleportServerDll.name)]
 		public static extern bool Client_HasResource(uid clientID, uid resourceID);
 		[DllImport(TeleportServerDll.name)]
-		private static extern void Client_UpdateNodeMovement(uid clientID, avs.MovementUpdate[] updates, int updateAmount);
+		private static extern void Client_UpdateNodeMovement(uid clientID, uid[] update_nodes, int updateAmount);
 
 
 		[DllImport(TeleportServerDll.name)]
@@ -535,7 +535,7 @@ namespace teleport
 			if (timeSincePositionUpdate < 1.0f / teleportSettings.moveUpdatesPerSecond)
 				return;
 			timeSincePositionUpdate = 0;
-			List<avs.MovementUpdate> updates = new List<avs.MovementUpdate>();
+			List<uid> updates = new List<uid>();
 			got_uids.Clear();
 
             foreach (teleport.StreamableRoot streamable in streamedHierarchies)
@@ -545,7 +545,7 @@ namespace teleport
 				{
 					if (got_uids.Contains(add.nodeID))
 						continue;
-					updates.Add(add);
+					updates.Add(add.nodeID);
 					got_uids.Add(add.nodeID);
 				}
 			}

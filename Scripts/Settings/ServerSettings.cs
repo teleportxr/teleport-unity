@@ -32,7 +32,7 @@ namespace teleport
 
 		[Header("Geometry")]
 		[MarshalAs(UnmanagedType.U1)] public bool isStreamingGeometry = true;
-		public UInt32 geometryTicksPerSecond = 2;
+		public Int32 geometryTicksPerSecond = 2;
 		public Int32 geometryBufferCutoffSize = 1048576; // Byte count we stop encoding nodes at.
 		public float confirmationWaitTime = 15; // Seconds to wait before resending a resource.
 		public float clientDrawDistanceOffset = 0; // Offset for distance pixels are clipped at for geometry on the client.

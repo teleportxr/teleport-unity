@@ -569,10 +569,10 @@ namespace teleport
 		private static extern void Server_RemoveNode(uid id);
 
 		[DllImport(TeleportServerDll.name)]
-		private static extern UInt64 Server_GetNumberOfTexturesWaitingForCompression();
+		public static extern UInt64 Server_GetNumberOfTexturesWaitingForCompression();
 		[DllImport(TeleportServerDll.name)]
-		
-		private static extern void Server_GetMessageForNextCompressedTexture(string str,UInt64 strlen);
+
+		public static extern void Server_GetMessageForNextCompressedTexture(string str,UInt64 strlen);
 		[DllImport(TeleportServerDll.name)]
 		private static extern void Server_CompressNextTexture();
 		[DllImport(TeleportServerDll.name)]
@@ -1099,7 +1099,7 @@ namespace teleport
 					extractedNode.localTransform = avs.Transform.FromLocalUnityTransform(gameObject.transform);
 				else
 					extractedNode.localTransform = avs.Transform.FromGlobalUnityTransform(gameObject.transform);
-				extractedNode.dataType = avs.NodeDataType.None;
+				extractedNode.dataType = avs.NodeDataType.Invalid;
 				teleport.SkeletonRoot skeletonRoot = gameObject.GetComponent<teleport.SkeletonRoot>();
 				if (skeletonRoot)
 				{
@@ -1149,11 +1149,11 @@ namespace teleport
 				nodeID = nodeID == 0 ? Server_GenerateUid() : nodeID;
 				sessionResourceUids[gameObject] = nodeID;
 				sessionNodes[nodeID] = gameObject;
-				if (extractedNode.dataType == avs.NodeDataType.None)
+				if (extractedNode.dataType == avs.NodeDataType.Invalid)
 				{
 					ExtractNodeMeshData(gameObject, ref extractedNode, forceMask, verify);
 				}
-				if (extractedNode.dataType == avs.NodeDataType.None)
+				if (extractedNode.dataType == avs.NodeDataType.Invalid)
 				{
 					SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
 					if (skinnedMeshRenderer&&skinnedMeshRenderer.enabled&&skinnedMeshRenderer.rootBone)
@@ -1172,7 +1172,7 @@ namespace teleport
 						}
 					}
 				}
-				if(extractedNode.dataType == avs.NodeDataType.None)
+				if(extractedNode.dataType == avs.NodeDataType.Invalid)
 				{
 					ExtractNodeLightData(gameObject, ref extractedNode, forceMask);
 				}
@@ -2230,14 +2230,6 @@ namespace teleport
 
 			if(rootBone.GetComponent<StreamableNode>() == null)
 				rootBone.gameObject.AddComponent<StreamableNode>();
-				/*
-			avs.Transform avsTransform = avs.Transform.FromLocalUnityTransform(rootBone);
-			avs.Node boneNode = new avs.Node();
-			boneNode.priority = 0;
-			boneNode.name = Marshal.StringToCoTaskMemUTF8(rootBone.name);
-			boneNode.parentID = parentID;
-			boneNode.localTransform = avsTransform;
-			boneNode.dataType = avs.NodeDataType.None;*/
 
 			ulong numChildren = (ulong)rootBone.childCount;
 			for (uint i =0; i < numChildren; i++)
@@ -2252,24 +2244,6 @@ namespace teleport
 
 			TeleportSettings teleportSettings = TeleportSettings.GetOrCreateSettings();
 			Server_SetCompressionLevels(teleportSettings.serverSettings.compressionLevel, teleportSettings.serverSettings.qualityLevel);
-#if UNITY_EDITOR
-			UInt64 strlen=32;
-			string compressionMessage=new string(' ',(int)strlen);
-			int i=0;
-			UInt64 initialTexturesToCompress = totalTexturesToCompress;
-			while (totalTexturesToCompress>0)
-			{
-				totalTexturesToCompress = Server_GetNumberOfTexturesWaitingForCompression();
-				Server_GetMessageForNextCompressedTexture(compressionMessage,strlen);
-
-				bool cancelled = EditorUtility.DisplayCancelableProgressBar("Compressing Textures", compressionMessage, (float)(i + 1) / (float)(initialTexturesToCompress));
-				if(cancelled)
-					break;
-				Server_CompressNextTexture();
-			}
-
-			EditorUtility.ClearProgressBar();
-#endif
 		}
 
 		private void AddChildNodes(GameObject gameObject, ForceExtractionMask forceMask,bool verify)
@@ -2397,11 +2371,22 @@ namespace teleport
 				// This is ok, it just means we're extracting one of the standard meshes: sphere, cube, etc.
 				//Debug.Log("GeometrySource.ExtractNodeMeshData extracting "+gameObject.name+" with HideFlags!");
 			}
+			MeshTracker meshTracker = gameObject.GetComponent<MeshTracker>();
 			if (mesh == null)
 			{
 				// This is ok, there might be no mesh at all.
 				//UnityEngine.Debug.LogError($"Failed GeometrySource.ExtractNodeMeshData for GameObject \"{gameObject.name}\"!");
-				return false;
+				if (meshTracker != null)
+				{
+					// We're running, so just retrieve from the mesh tracker.
+					extractTo.dataID = Server_PathToUid( meshTracker.resourcePath);
+					extractTo.dataType=avs.NodeDataType.Mesh;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
 			extractTo.dataID = AddMesh(mesh,  gameObject ,forceMask, verify);
 
@@ -3396,14 +3381,14 @@ namespace teleport
 			{
 				return 0;
 			}
-
+			bool force_recreate_texture = (forceMask & ForceExtractionMask.FORCE_SUBRESOURCES) == ForceExtractionMask.FORCE_SUBRESOURCES;
 			//Just return the ID; if we have already processed the texture and the texture can be found on the unmanaged side.
-			if(sessionResourceUids.TryGetValue(texture, out uid textureID) && Server_IsTextureStored(textureID) && (forceMask & ForceExtractionMask.FORCE_SUBRESOURCES) == ForceExtractionMask.FORCE_NOTHING)
+			if (sessionResourceUids.TryGetValue(texture, out uid textureID) && Server_IsTextureStored(textureID) && !force_recreate_texture)
 			{
 				return textureID;
 			}
 
-			GetResourcePath(texture, out string resourcePath, (forceMask & ForceExtractionMask.FORCE_SUBRESOURCES) == ForceExtractionMask.FORCE_SUBRESOURCES);
+			GetResourcePath(texture, out string resourcePath,force_recreate_texture);
 			uid uid_from_path= Server_GetOrGenerateUid(resourcePath);
 			if (textureID == 0)
 			{
@@ -3421,21 +3406,17 @@ namespace teleport
 				}
 			}
 			sessionResourceUids[texture] = textureID;
-			if(Server_IsTextureStored(textureID))
+			//We can't extract textures in play-mode.
+			if (Application.isPlaying)
 			{
-				if (Application.isPlaying||(forceMask & ForceExtractionMask.FORCE_SUBRESOURCES) == ForceExtractionMask.FORCE_NOTHING)
+				if (Server_EnsureResourceIsLoaded(textureID))
 					return textureID;
+				UnityEngine.Debug.LogWarning("Texture <b>" + texture.name + "</b> has not been extracted, but is being used on streamed geometry!");
+				return 0;
 			}
-			else
-			{ 
-				//We can't extract textures in play-mode.
-				if (Application.isPlaying)
-				{
-					if(Server_EnsureResourceIsLoaded(textureID))
-						return textureID;
-					UnityEngine.Debug.LogWarning("Texture <b>" + texture.name + "</b> has not been extracted, but is being used on streamed geometry!");
-					return 0;
-				}
+			if (Server_IsTextureStored(textureID)&&!force_recreate_texture)
+			{
+				return textureID;
 			}
 			string name=texture.name;
 			if(textureConversion!= TextureConversion.CONVERT_NOTHING)
@@ -3480,7 +3461,7 @@ namespace teleport
 					extractedTexture.arrayCount = 1;
 					if (renderTexture.dimension == UnityEngine.Rendering.TextureDimension.Cube)
 					{
-						extractedTexture.arrayCount = 6;
+						//extractedTexture.arrayCount = 6;
 						extractedTexture.cubemap = true;
 					}
 					extractedTexture.mipCount=(uint)renderTexture.mipmapCount;

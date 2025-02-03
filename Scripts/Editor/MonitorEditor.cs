@@ -29,12 +29,16 @@ namespace teleport
 			if (dynamic_lighting)
             {
 				monitor.environmentCubemap = (Cubemap)EditorGUILayout.ObjectField(new GUIContent("Source Environment Cubemap", "The environment texture to use when generating specular and diffuse cubemaps below."), monitor.environmentCubemap, typeof(Cubemap), false);
+				
 				monitor.environmentRenderTexture = (RenderTexture)EditorGUILayout.ObjectField(new GUIContent("Environment RenderTexture", "A rendertexture that will be generated from the Source Environment Cubemap above, " +
 																										"this texture will be used for background in BackgroundMode.TEXTURE."), monitor.environmentRenderTexture, typeof(RenderTexture), false);
+				EditorGUILayout.LabelField("environmentTextureResourcePath:", monitor.environmentTextureResourcePath);
 				monitor.specularRenderTexture = (RenderTexture)EditorGUILayout.ObjectField(new GUIContent("Specular Cubemap RenderTexture","A rendertexture that will be generated from the Source Environment Cubemap above, " +
 																										"this texture will be used for specular lighting of movable objects."), monitor.specularRenderTexture, typeof(RenderTexture),false);
+				EditorGUILayout.LabelField("specularTextureResourcePath:", monitor.specularTextureResourcePath);
 				monitor.diffuseRenderTexture = (RenderTexture)EditorGUILayout.ObjectField(new GUIContent("Diffuse Cubemap RenderTexture", "A rendertexture that will be generated from the Source Environment Cubemap above, " +
 																										"this texture will be used for diffuse lighting of movable objects."), monitor.diffuseRenderTexture, typeof(RenderTexture), false);
+				EditorGUILayout.LabelField("diffuseTextureResourcePath:", monitor.diffuseTextureResourcePath);
 				monitor.specularMultiplier=EditorGUILayout.FloatField("Multiplier", monitor.specularMultiplier);
 				monitor.envMapSize = EditorGUILayout.IntField("Generate Cubemap Size", monitor.envMapSize);
 				if (GUILayout.Button("Generate Env Maps"))

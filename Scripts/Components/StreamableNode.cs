@@ -207,7 +207,7 @@ namespace teleport
 			previousLocalUpdate = localUpdate;
 			previousMovementValid = true;
 		}
-		public avs.MovementUpdate GetMovementUpdate(uid clientID)
+		public avs.MovementUpdate GetMovementUpdate()
 		{
 			return localUpdate;
 		}

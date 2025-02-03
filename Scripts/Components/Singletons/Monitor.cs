@@ -115,6 +115,9 @@ namespace teleport
 		private static extern void Server_SetConnectionTimeout(Int32 timeout);
 		[DllImport(TeleportServerDll.name)]
 		private static extern void Server_UpdateServerSettings(teleport.ServerSettings newSettings);
+
+		[DllImport(TeleportServerDll.name)]
+		public static extern bool Server_UpdateNodeTransform(uid id,avs.Transform tr);
 		
 		[DllImport(TeleportServerDll.name)]
 		private static extern void Server_SetClientPosition(uid clientID, Vector3 pos);
@@ -144,12 +147,15 @@ namespace teleport
 			
         }
 		public RenderTexture environmentRenderTexture;
+		public string environmentTextureResourcePath;
 		[Tooltip("A cubemap rendertarget. This will be generated from the 'Environment Cubemap' and used for lighting dynamic objects.")]
 		//! This will point to a saved asset texture.
 		public RenderTexture specularRenderTexture;
+		public string specularTextureResourcePath;
 		[Tooltip("A cubemap rendertarget. This will be generated from the 'Environment Cubemap' and used for lighting dynamic objects.")]
 		//! This will point to a saved asset texture.
 		public RenderTexture diffuseRenderTexture;
+		public string diffuseTextureResourcePath;
 		[Tooltip("Multiplier for generating the specular render texture from the environment cubemap.")]
 		public float specularMultiplier=1.0F;
 #if UNITY_EDITOR
@@ -544,8 +550,8 @@ namespace teleport
 			string scenePath = SceneManager.GetActiveScene().path;
 			if(environmentRenderTexture)
 			{
-				string environmentRenderTexturePath = UnityEditor.AssetDatabase.GetAssetPath(environmentRenderTexture);
-				if (environmentRenderTexturePath == "")
+				environmentTextureResourcePath= UnityEditor.AssetDatabase.GetAssetPath(environmentRenderTexture);
+				if (environmentTextureResourcePath == "")
 					environmentRenderTexture = null;
 			}
 			int renderEnvMapSize=Math.Min(1024,environmentCubemap.width);
@@ -568,8 +574,8 @@ namespace teleport
 			}
 			if (specularRenderTexture)
 			{
-				string specularRenderTexturePath = UnityEditor.AssetDatabase.GetAssetPath(specularRenderTexture);
-				if(specularRenderTexturePath=="")
+				specularTextureResourcePath = UnityEditor.AssetDatabase.GetAssetPath(specularRenderTexture);
+				if(specularTextureResourcePath == "")
 					specularRenderTexture = null;
 			}
 			// If specular rendertexture is unassigned or not the same size as the env cubemap, recreate it as a saved asset.
@@ -591,8 +597,8 @@ namespace teleport
 			}
 			if (diffuseRenderTexture)
 			{
-				string diffuseRenderTexturePath = UnityEditor.AssetDatabase.GetAssetPath(diffuseRenderTexture);
-				if (diffuseRenderTexturePath == "")
+				diffuseTextureResourcePath = UnityEditor.AssetDatabase.GetAssetPath(diffuseRenderTexture);
+				if (diffuseTextureResourcePath == "")
 					diffuseRenderTexture = null;
 			}
 			// If diffuse rendertexture is unassigned or not the same size as the env cubemap, recreate it as a saved asset.

@@ -44,8 +44,6 @@ namespace teleport
 		//GUI variables that control user-changeable properties.
 		private Vector2 scrollPosition_gameObjects;
 		private Vector2 scrollPosition_textures;
-	//	private bool foldout_gameObjects = false;
-		private bool foldout_textures = false;
 		private Vector2 scrollPosition_meshTable;
 
 		private string[] categories;
@@ -192,7 +190,19 @@ namespace teleport
 			EditorGUILayout.EndFoldoutHeaderGroup();
 			foldoutExtraction= EditorGUILayout.BeginFoldoutHeaderGroup(foldoutExtraction, "Extraction", titleStyle);
 			if(foldoutExtraction)
-			{ 
+			{
+
+#if UNITY_EDITOR
+				UInt64 strlen = 64;
+				string compressionMessage = new string(' ', (int)strlen);
+				
+				UInt64 totalTexturesToCompress = GeometrySource.Server_GetNumberOfTexturesWaitingForCompression();
+				GeometrySource.Server_GetMessageForNextCompressedTexture(compressionMessage, strlen);
+
+				GUILayout.Label(compressionMessage, labelTextStyle, GUILayout.Width(300));
+				 //(float)(i + 1) / (float)(totalTexturesToCompress)
+#endif
+
 				EditorGUILayout.Space(10);
 				GUI.enabled = !Application.isPlaying;
 				labelTextStyle.alignment=TextAnchor.MiddleRight;
@@ -242,7 +252,7 @@ namespace teleport
 					EditorGUILayout.BeginHorizontal();
 					GUILayout.Label("Dynamic Object Lighting Textures:", labelTextStyle, GUILayout.Width(300));
 					bool wasEnabled2 = GUI.enabled;
-					GUI.enabled &= (Monitor.Instance?Monitor.Instance.envMapsGenerated:false);
+					GUI.enabled &= (Monitor.Instance?(Monitor.Instance.envMapsGenerated):false);
 
 					if (GUILayout.Button("Extract"))
 					{

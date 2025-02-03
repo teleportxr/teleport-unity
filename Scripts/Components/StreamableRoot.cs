@@ -141,12 +141,17 @@ namespace teleport
 			{
 				return ;
 			}
+			UpdateMovement();
+		}
+		public void UpdateMovement()
+		{
 			foreach (StreamableNode streamedNode in streamedHierarchy)
 			{
 				streamedNode.CalcMovementUpdate();
+				var upd = streamedNode.GetMovementUpdate();
+				Monitor.Server_UpdateNodeTransform(streamedNode.nodeID, avs.Transform.FromLocalUnityTransform(streamedNode.gameObject.transform));
 			}
 		}
-
 		public List<avs.MovementUpdate> GetMovementUpdates(uid clientID)
 		{
 			//Return an empty update list, if we're not sending movement updates.
@@ -166,7 +171,7 @@ namespace teleport
 					Debug.LogWarning($"Failed to update movement of node! Null node in {nameof(teleport.StreamableRoot)}.childHierarchy of \"{name}\"!");
 					continue;
 				}
-				var update= streamedNode.GetMovementUpdate( clientID);
+				var update= streamedNode.GetMovementUpdate( );
 				if(update.nodeID!=0)
 					updates.Add(update);
 				// TODO: FOR NOW, any animator means we don't stream movement below the root, because this should be handled by animations.
