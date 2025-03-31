@@ -32,7 +32,7 @@ namespace teleport
 				
 				monitor.environmentRenderTexture = (RenderTexture)EditorGUILayout.ObjectField(new GUIContent("Environment RenderTexture", "A rendertexture that will be generated from the Source Environment Cubemap above, " +
 																										"this texture will be used for background in BackgroundMode.TEXTURE."), monitor.environmentRenderTexture, typeof(RenderTexture), false);
-				EditorGUILayout.LabelField("environmentTextureResourcePath:", monitor.environmentTextureResourcePath);
+				monitor.environmentTextureResourcePath=EditorGUILayout.TextField("environmentTextureResourcePath:", monitor.environmentTextureResourcePath);
 				monitor.specularRenderTexture = (RenderTexture)EditorGUILayout.ObjectField(new GUIContent("Specular Cubemap RenderTexture","A rendertexture that will be generated from the Source Environment Cubemap above, " +
 																										"this texture will be used for specular lighting of movable objects."), monitor.specularRenderTexture, typeof(RenderTexture),false);
 				EditorGUILayout.LabelField("specularTextureResourcePath:", monitor.specularTextureResourcePath);

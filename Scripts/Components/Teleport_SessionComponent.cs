@@ -719,16 +719,9 @@ namespace teleport
 				clientDynamicLighting.diffusePos = clientDynamicLighting.specularPos + new Vector2Int(0, clientDynamicLighting.specularCubemapSize * 2);
 				clientDynamicLighting.lightPos = clientDynamicLighting.diffusePos + new Vector2Int(clientDynamicLighting.specularCubemapSize * 3 / 2, clientDynamicLighting.specularCubemapSize * 2);
 			}
-			clientDynamicLighting.diffuseCubemapTexture= 0;
-			clientDynamicLighting.specularCubemapTexture = 0;
-			if (Monitor.Instance.diffuseRenderTexture)
-			{
-				clientDynamicLighting.diffuseCubemapTexture=GeometrySource.GetGeometrySource().AddTexture(Monitor.Instance.diffuseRenderTexture,gameObject);
-			}
-			if (Monitor.Instance.specularRenderTexture)
-			{
-				clientDynamicLighting.specularCubemapTexture = GeometrySource.GetGeometrySource().AddTexture(Monitor.Instance.specularRenderTexture,gameObject);
-			}
+			clientDynamicLighting.diffuseCubemapTexture = GeometrySource.Server_PathToUid(Monitor.Instance.diffuseTextureResourcePath);
+			clientDynamicLighting.specularCubemapTexture = GeometrySource.Server_PathToUid(Monitor.Instance.specularTextureResourcePath);
+			
 			clientDynamicLighting.lightingMode=Monitor.Instance.lightingMode;
 		}
 		private void UpdateClientSettings()
@@ -767,7 +760,7 @@ namespace teleport
 			}
 			if (clientSettings.backgroundMode == BackgroundMode.TEXTURE)
 			{
-				clientSettings.backgroundTexture = GeometrySource.GetGeometrySource().AddTexture(Monitor.Instance.environmentRenderTexture,gameObject);
+				clientSettings.backgroundTexture = GeometrySource.Server_PathToUid(Monitor.Instance.environmentTextureResourcePath);
 			}
 			UpdateClientDynamicLighting(cubeMapsOffset);
 			// Depth is stored in color's alpha channel if alpha layer encoding is enabled.

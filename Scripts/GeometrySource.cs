@@ -506,9 +506,9 @@ namespace teleport
 		[DllImport(TeleportServerDll.name)]
 		public static extern uid Server_GetOrGenerateUid(string path);
 		[DllImport(TeleportServerDll.name)]
-		private static extern uid Server_PathToUid(string path);
+		public static extern uid Server_PathToUid(string path);
         [DllImport(TeleportServerDll.name)]
-        private static extern UInt64 Server_UidToPath(uid u, StringBuilder path, UInt64 stringsize);
+		public static extern UInt64 Server_UidToPath(uid u, StringBuilder path, UInt64 stringsize);
 		[DllImport(TeleportServerDll.name)]
 		private static extern UInt64 Server_EnsurePathResourceIsLoaded(string path);
 

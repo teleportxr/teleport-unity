@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using uid = System.UInt64;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Rendering.CameraUI;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -147,6 +149,7 @@ namespace teleport
 			
         }
 		public RenderTexture environmentRenderTexture;
+	
 		public string environmentTextureResourcePath;
 		[Tooltip("A cubemap rendertarget. This will be generated from the 'Environment Cubemap' and used for lighting dynamic objects.")]
 		//! This will point to a saved asset texture.
@@ -550,9 +553,12 @@ namespace teleport
 			string scenePath = SceneManager.GetActiveScene().path;
 			if(environmentRenderTexture)
 			{
-				environmentTextureResourcePath= UnityEditor.AssetDatabase.GetAssetPath(environmentRenderTexture);
-				if (environmentTextureResourcePath == "")
-					environmentRenderTexture = null;
+				string path = "";
+				if (GeometrySource.GetResourcePath(environmentRenderTexture, out path, true))
+				{
+					if (path != "")
+						environmentTextureResourcePath = path;
+				}
 			}
 			int renderEnvMapSize=Math.Min(1024,environmentCubemap.width);
 			// If environment rendertexture is unassigned or not the same size as the env cubemap, recreate it as a saved asset.
@@ -574,9 +580,11 @@ namespace teleport
 			}
 			if (specularRenderTexture)
 			{
-				specularTextureResourcePath = UnityEditor.AssetDatabase.GetAssetPath(specularRenderTexture);
-				if(specularTextureResourcePath == "")
-					specularRenderTexture = null;
+				string path = "";
+				if (GeometrySource.GetResourcePath(specularRenderTexture, out path, true))
+				{
+					specularTextureResourcePath = path;
+				}
 			}
 			// If specular rendertexture is unassigned or not the same size as the env cubemap, recreate it as a saved asset.
 			if (specularRenderTexture == null || specularRenderTexture.width != envMapSize ||
@@ -597,9 +605,11 @@ namespace teleport
 			}
 			if (diffuseRenderTexture)
 			{
-				diffuseTextureResourcePath = UnityEditor.AssetDatabase.GetAssetPath(diffuseRenderTexture);
-				if (diffuseTextureResourcePath == "")
-					diffuseRenderTexture = null;
+				string path="";
+				if (GeometrySource.GetResourcePath(diffuseRenderTexture, out path, true))
+				{
+					diffuseTextureResourcePath = path;
+				}
 			}
 			// If diffuse rendertexture is unassigned or not the same size as the env cubemap, recreate it as a saved asset.
 			if (diffuseRenderTexture == null || diffuseRenderTexture.width != envMapSize ||
@@ -615,6 +625,7 @@ namespace teleport
 				UnityEditor.AssetDatabase.CreateAsset(diffuseRenderTexture, assetPath);
 			}
 			dummyCam.Render();
+			EditorUtility.SetDirty(this);
 		}
 #endif
 		private void OnGUI()
