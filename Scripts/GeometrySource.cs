@@ -3033,22 +3033,55 @@ namespace teleport
 			newBuffer.data = new byte[newBuffer.byteLength];
 
 			//Convert to ushort for stride 2.
-			if(stride == 2)
+			if (stride == 2)
 			{
-				for(int i = 0; i < data.Length; i++)
+				int faceCount= data.Length/3;
+				if (faceCount * 3 != data.Length)
 				{
-					BitConverter.GetBytes((ushort)data[i]).CopyTo(newBuffer.data, i * stride);
+					UnityEngine.Debug.LogError($"Index buffer count is not a multiple of 3!");
+					for (int i = 0; i < data.Length; i++)
+					{
+						BitConverter.GetBytes((ushort)data[i]).CopyTo(newBuffer.data, i * stride);
+					}
 				}
+				else
+				{
+					for (int i = 0; i < faceCount; i++)
+					{
+						BitConverter.GetBytes((ushort)data[i * 3 + 2]).CopyTo(newBuffer.data, (i * 3 + 0) * stride);
+						BitConverter.GetBytes((ushort)data[i * 3 + 1]).CopyTo(newBuffer.data, (i * 3 + 1) * stride);
+						BitConverter.GetBytes((ushort)data[i * 3 + 0]).CopyTo(newBuffer.data, (i * 3 + 2) * stride);
+					}
+				}
+				// In GLTF, which standard we adopt, when a mesh primitive uses any triangle-based topology (i.e., triangles, triangle strip, or triangle fan),
+				// the determinant of the transform defines the winding order of that primitive.
+				// If the determinant is a positive value, the winding order triangle faces is counterclockwise, otherwise clockwise.
+				// So here we flip the order.
 			}
 			//Convert to uint for stride 4.
 			else
 			{
 				if(stride != 4)
-					UnityEngine.Debug.LogError($"CreateIndexBufferAndView(...) received invalid stride of {stride}! Extracting as uint!");
-
-				for(int i = 0; i < data.Length; i++)
 				{
-					BitConverter.GetBytes((uint)data[i]).CopyTo(newBuffer.data, i * stride);
+					UnityEngine.Debug.LogError($"CreateIndexBufferAndView(...) received invalid stride of {stride}! Extracting as uint!");
+					stride=4;
+				}
+				int faceCount = data.Length / 3;
+				if (faceCount * 3 != data.Length)
+				{ 
+					for (int i = 0; i < data.Length; i++)
+					{
+						BitConverter.GetBytes((uint)data[i]).CopyTo(newBuffer.data, i * stride);
+					}
+				}
+				else
+				{
+					for (int i = 0; i < faceCount; i++)
+					{
+						BitConverter.GetBytes((uint)data[i * 3 + 2]).CopyTo(newBuffer.data, (i * 3 + 0) * stride);
+						BitConverter.GetBytes((uint)data[i * 3 + 1]).CopyTo(newBuffer.data, (i * 3 + 1) * stride);
+						BitConverter.GetBytes((uint)data[i * 3 + 0]).CopyTo(newBuffer.data, (i * 3 + 2) * stride);
+					}
 				}
 			}
 

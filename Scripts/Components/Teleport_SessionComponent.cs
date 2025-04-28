@@ -849,7 +849,7 @@ namespace teleport
 			}
 			if (_head != null && _clientspaceRoot != null)
 			{
-				if (!Client_HasOrigin(clientID) || resetOrigin )//|| _clientspaceRoot.transform.hasChanged)
+				if (!Client_HasOrigin(clientID) || resetOrigin )
 				{
 					if (!GeometrySource.GetGeometrySource().HasNode(origin_uid))
 					{
