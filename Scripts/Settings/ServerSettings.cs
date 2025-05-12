@@ -17,7 +17,7 @@ namespace teleport
 	}
 	[HelpURL("https://docs.teleportvr.io/unity.html")]
 	//! Settings structure for the server, to be shared between C# and the C++ dll.
-	//! These values are set in the Unity Editor under Project Settings/Teleport VR, and passed as const
+	//! These values are set in the Unity Editor under Project Settings/Teleport XR, and passed as const
 	//! to the C++ dll.
 	[StructLayout(LayoutKind.Sequential, Pack = 1), Serializable]
     public class ServerSettings

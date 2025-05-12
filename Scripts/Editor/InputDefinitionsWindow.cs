@@ -9,7 +9,7 @@ namespace teleport
 {
     public class InputDefinitionsWindow : EditorWindow
 	{
-		[MenuItem("Teleport VR/Inputs", false, 2000)]
+		[MenuItem("Teleport XR/Inputs", false, 2000)]
 		public static void OpenInputDefinitionsWindow()
 		{
 			InputDefinitionsWindow window = GetWindow<InputDefinitionsWindow>(false, "Teleport Inputs");

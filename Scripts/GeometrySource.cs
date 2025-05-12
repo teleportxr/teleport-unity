@@ -217,7 +217,6 @@ namespace avs
 		public IntPtr name;
 
 		public Transform localTransform;
-		//public Transform globalTransform;
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool stationary;
@@ -432,10 +431,8 @@ namespace teleport
 		public IntPtr text;
 		
 		public IntPtr font;
-		public int size;
+		public int pointSize;
 		public float lineHeight;
-		public float width;
-		public float height;
 		public avs.Vector4 colour= new avs.Vector4(0.0f,0.0f,0.0f,0.0f);
 	}
 	[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
@@ -2310,9 +2307,7 @@ namespace teleport
 			if(interopTextCanvas.text==null)
 				return 0;
 			interopTextCanvas.font=Marshal.StringToCoTaskMemUTF8(resourcePath);
-			interopTextCanvas.size=textCanvas.size;
-			interopTextCanvas.width=textCanvas.width;
-			interopTextCanvas.height=textCanvas.height;
+			interopTextCanvas.pointSize=textCanvas.size;
 			interopTextCanvas.lineHeight=textCanvas.lineHeight;
 			interopTextCanvas.colour=textCanvas.colour;
 			

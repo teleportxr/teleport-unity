@@ -337,11 +337,12 @@ namespace teleport
 			AddComponentTypeToHierarchy<MeshRenderer>();
 			AddComponentTypeToHierarchy<SkinnedMeshRenderer>();
 			AddComponentTypeToHierarchy<Light>();
+			AddComponentTypeToHierarchy<TextCanvas>();
 
 			//Add animator trackers to nodes in streamed hierarchy with animator components.
 			//We use streamedHierarchy, rather than GetComponentInChildren(...),
 			// as we need to restrict the search to the streamed hierarchy rather than the entire Transform hierarchy.
-			foreach(GameObject gameObject in streamedHierarchy)
+			foreach (GameObject gameObject in streamedHierarchy)
 			{
 				AddAnimatorTracker(gameObject);
 			}

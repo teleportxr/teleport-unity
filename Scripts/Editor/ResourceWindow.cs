@@ -49,7 +49,7 @@ namespace teleport
 		private string[] categories;
 		private int selectedCategory = 0;
 
-		[MenuItem("Teleport VR/Resource Manager",false,1000)]
+		[MenuItem("Teleport XR/Resource Manager",false,1000)]
 		public static void OpenResourceWindow()
 		{
 			ResourceWindow window = GetWindow<ResourceWindow>(false, "Teleport Resources");

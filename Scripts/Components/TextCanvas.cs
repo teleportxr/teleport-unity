@@ -16,10 +16,6 @@ namespace teleport
 		[SerializeField]
 		string _text="";
 		[SerializeField]
-		float _width=1.0f;
-		[SerializeField]
-		float _height=1.0f;
-		[SerializeField]
 		float _lineHeight=0.1f;
 		public int size=64;
 		[SerializeField]
@@ -35,36 +31,6 @@ namespace teleport
 				if (_text != value)
 				{
 					_text = value;
-					EmitChanged();
-				}
-			}
-		}
-		public float width
-		{
-			get
-			{
-				return _width;
-			}
-			set
-			{
-				if (_width != value)
-				{
-					_width = value;
-					EmitChanged();
-				}
-			}
-		}
-		public float height
-		{
-			get
-			{
-				return _height;
-			}
-			set
-			{
-				if (_height != value)
-				{
-					_height = value;
 					EmitChanged();
 				}
 			}

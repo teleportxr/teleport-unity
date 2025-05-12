@@ -5,7 +5,7 @@ namespace teleport
 {
     public class SceneManagement 
     {
-        [MenuItem("Teleport VR/Open Default Scene", false, 2003)]
+        [MenuItem("Teleport XR/Open Default Scene", false, 2003)]
 		public static void OpenResourceWindow()
         {
             var settings = TeleportSettings.GetOrCreateSettings();

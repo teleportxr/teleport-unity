@@ -13,8 +13,8 @@ namespace teleport
 			Color colr = textCanvas.colour;
 			Gizmos.color = colr;
 			Gizmos.matrix = textCanvas.transform.localToWorldMatrix;
-			float x=textCanvas.width/2.0f;
-			float y=textCanvas.height/2.0f;
+			float x=0.5f;
+			float y=0.5f;
 			Vector3 c1=new Vector3(-x,0,-y);
 			Vector3 c2=new Vector3(x,0,-y);
 			Vector3 c3=new Vector3(x,0,y);
@@ -25,7 +25,7 @@ namespace teleport
 			Gizmos.DrawLine(c4,c1);
 			
 			Vector3 l1,l2;
-			Color colr2 = new Color(1.0f, 0.6f, 0.2f, 0.5f);
+			Color colr2 = textCanvas.colour;//new Color(1.0f, 0.6f, 0.2f, 0.5f);
 			Gizmos.color = colr2;
 			for (int i = 0; i < 10; i++)
 			{
@@ -34,6 +34,7 @@ namespace teleport
 				l2=c2*(1.0f-interp)+c3*interp;
 				Gizmos.DrawLine(l1,l2);
 			}
+			Gizmos.DrawGUITexture(new Rect(c1.x, c1.z, 2 * x, 2 * y), textCanvas.font.material.mainTexture);
 			//TextGizmo.Instance.DrawText(Camera.current,textCanvas.transform.position,textCanvas.text);
 		}
 	}

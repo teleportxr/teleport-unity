@@ -212,7 +212,7 @@ namespace teleport
 		{
 			if (IsSettingsAvailable())
 			{
-				var provider = new TeleportSettingsProvider("Project/Teleport VR", SettingsScope.Project);
+				var provider = new TeleportSettingsProvider("Project/Teleport XR", SettingsScope.Project);
 
 				// Automatically extract all keywords from the Styles.
 				//if(m_TeleportSettings==null)
