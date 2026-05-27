@@ -154,7 +154,7 @@ namespace teleport
 				EditorGUILayout.LabelField("Choose objects that should be streamed as geometry.");
 				if (EditorGUILayout.LinkButton("Help"))
 				{
-					System.Diagnostics.Process.Start("explorer", "https://docs.teleportvr.io/unity/index.html#resource-management");
+					System.Diagnostics.Process.Start("explorer", "https://docs.teleportxr.io/unity/index.html#resource-management");
 				}
 				EditorGUILayout.EndHorizontal();
 				if (GUILayout.Button("Select All Roots"))

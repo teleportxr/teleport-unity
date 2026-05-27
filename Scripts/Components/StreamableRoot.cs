@@ -7,7 +7,7 @@ using uid = System.UInt64;
 
 namespace teleport
 {
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	//This component is automatically added to GameObjects that meet the criteria for geometry streaming.
 	[DisallowMultipleComponent]
 	public class StreamableRoot : MonoBehaviour

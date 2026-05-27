@@ -4,7 +4,7 @@ using UnityEngine;
 namespace teleport
 {
     [CustomEditor(typeof(teleport.TextCanvas))]
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	public class TextCanvasEditor : Editor
     {
         public override void OnInspectorGUI()

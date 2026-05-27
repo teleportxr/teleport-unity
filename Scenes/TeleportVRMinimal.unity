@@ -745,7 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538cced528fa15347ad46080dda066f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: https://docs.teleportvr.io
+  url: https://docs.teleportxr.io
 --- !u!4 &870547514
 Transform:
   m_ObjectHideFlags: 0

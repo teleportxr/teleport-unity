@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace teleport
 {
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	// Create a new type of Settings Asset.
 	[System.Serializable]
 	public class TeleportSettings : ScriptableObject

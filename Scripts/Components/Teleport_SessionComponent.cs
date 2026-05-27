@@ -14,7 +14,7 @@ namespace teleport
 	{
 		void OnSessionStart();
 	}
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	/// <summary>
 	/// This component manages a client session, so there is one Teleport_SessionComponent per session,
 	/// and this typically is attached to the root GameObject of each client.

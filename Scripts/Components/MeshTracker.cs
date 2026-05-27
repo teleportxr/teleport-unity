@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace teleport
 {
-    [HelpURL("https://docs.teleportvr.io/unity")]
+    [HelpURL("https://docs.teleportxr.io/unity")]
     public class MeshTracker : MonoBehaviour
     {
         public string resourcePath;

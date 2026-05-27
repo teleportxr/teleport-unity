@@ -15,7 +15,7 @@ namespace teleport
 	{
 		NONE = 0, TEXTURE, VIDEO
 	}
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	//! Settings structure for the server, to be shared between C# and the C++ dll.
 	//! These values are set in the Unity Editor under Project Settings/Teleport XR, and passed as const
 	//! to the C++ dll.

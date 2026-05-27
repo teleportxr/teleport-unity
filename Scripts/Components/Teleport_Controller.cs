@@ -7,7 +7,7 @@ using uid = System.UInt64;
 
 namespace teleport
 {
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	public class Teleport_Controller : MonoBehaviour
 	{
 		[Tooltip("A full or partial OpenXR path expressed as a Regular Expression.\nThe client should try to match this path with one of its available pose inputs.")]

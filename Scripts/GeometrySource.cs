@@ -451,7 +451,7 @@ namespace teleport
 	/// <summary>
 	/// A singleton class obtained with GeometrySource.GetGeometrySource();
 	/// </summary>
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	public class GeometrySource : ScriptableObject, ISerializationCallbackReceiver
 	{
 		//Meta data on a resource loaded from disk.

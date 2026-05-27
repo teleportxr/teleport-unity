@@ -7,7 +7,7 @@ using uid = System.UInt64;
 namespace teleport
 {
 	[DisallowMultipleComponent]
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	public class Teleport_AnimatorTracker : MonoBehaviour
 	{
 		#region DllImport

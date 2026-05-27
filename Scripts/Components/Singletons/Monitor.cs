@@ -27,7 +27,7 @@ namespace teleport
     };
 #if UNITY_EDITOR
 	[UnityEditor.InitializeOnLoad]
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 #endif
 	/// <summary>
 	/// A singleton component which stores per-server-session state.

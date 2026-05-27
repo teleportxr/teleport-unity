@@ -17,7 +17,7 @@ namespace teleport
 	{
 		None=0, Press=1, Release=2, Either=3
 	}
-	[HelpURL("https://docs.teleportvr.io/unity.html")]
+	[HelpURL("https://docs.teleportxr.io/unity.html")]
 	public class Input : MonoBehaviour
 	{
 		private void OnEnable()
